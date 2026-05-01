@@ -79,16 +79,24 @@ async def etoro_websocket_listener():
     except Exception as e:
         print(f"⚠️ Errore imprevisto: {e}")
 
-# --- ENTRY POINT ---
+# --- ENTRY POINT CON DEBUG AVANZATO ---
 async def main():
-    # Avvia il server web e il listener WebSocket in parallelo
-    await asyncio.gather(
-        start_web_server(),
-        etoro_websocket_listener()
-    )
+    print("🎬 Inizializzazione applicazione...")
+    try:
+        # Avvia il server web e il listener WebSocket in parallelo
+        await asyncio.gather(
+            start_web_server(),
+            etoro_websocket_listener()
+        )
+    except Exception as e:
+        print(f"💥 Errore fatale nel ciclo principale: {e}")
+    finally:
+        # Impedisce l'uscita immediata per leggere i log
+        print("⏳ Lo script sta per terminare tra 30 secondi...")
+        await asyncio.sleep(30)
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-    except KeyboardInterrupt:
-        print("🛑 Script fermato dall'utente.")
+    except Exception as e:
+        print(f"🚨 Errore critico all'avvio: {e}")
